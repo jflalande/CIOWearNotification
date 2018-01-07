@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
                         .setContentTitle("Hey !")
                         .setContentText("You should check this information...");
 
-        /*
+
         // Wearable specificities
         // ======================
 
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Add action
         mBuilder.extend(new WearableExtender().addAction(action));
-        */
+
 
         // Fire the notification
         // =====================
