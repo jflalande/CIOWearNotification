@@ -10,7 +10,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import android.support.v4.app.NotificationCompat.WearableExtender;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -29,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         // Regular notification
         // ====================
         NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
+                new NotificationCompat.Builder(this, "M_CH_ID")
                         .setSmallIcon(R.drawable.ic_launcher_background)
                         .setContentTitle("Hey !")
                         .setContentText("You should check this information...");
@@ -40,8 +39,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Create an intent for the reply action
-        // getBroadcast enables to have a broadcast message sent to the phone
-        Intent actionIntent = new Intent("mynotification.intent");
+        // getBroadcast enables to have a broadcast
+        // message sent to the phone
+        Intent actionIntent =
+                new Intent("mynotification.intent");
         PendingIntent actionPendingIntent =
                 PendingIntent.getBroadcast(this, 0, actionIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                         .build();
 
         // Add action
-        mBuilder.extend(new WearableExtender().addAction(action));
+        mBuilder.extend(new NotificationCompat.WearableExtender().addAction(action));
 
 
         // Fire the notification
