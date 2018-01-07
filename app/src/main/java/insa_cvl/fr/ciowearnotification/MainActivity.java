@@ -12,39 +12,19 @@ import android.os.Bundle;
 
 import android.support.v4.app.NotificationCompat.WearableExtender;
 import android.util.Log;
+import android.view.View;
 import android.widget.CheckBox;
 
 
 public class MainActivity extends AppCompatActivity {
-    private BroadcastReceiver br_;
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        br_ = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Log.i("CIO", "PendingIntent received !");
-                CheckBox cb = findViewById(R.id.checkBox);
-                cb.setChecked(true);
-            }
-        };
-        IntentFilter filter = new IntentFilter("mynotification.intent");
-        this.registerReceiver(br_, filter);
-        Log.i("CIO", "Filter installed.");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        this.unregisterReceiver(br_);
-        Log.i("CIO", "Filter uninstalled.");
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
+
+    public void sentNotification(View view) {
 
         // Regular notification
         // ====================
@@ -54,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
                         .setContentTitle("Hey !")
                         .setContentText("You should check this information...");
 
-
+        /*
         // Wearable specificities
         // ======================
 
@@ -74,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Add action
         mBuilder.extend(new WearableExtender().addAction(action));
-
+        */
 
         // Fire the notification
         // =====================
@@ -86,10 +66,39 @@ public class MainActivity extends AppCompatActivity {
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         // Builds the notification and issues it.
         mNotifyMgr.notify(mNotificationId, mBuilder.build());
-
-
-
-
-
     }
+
+    private BroadcastReceiver br_;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // Disable check box
+        CheckBox cb = findViewById(R.id.checkBox);
+        cb.setChecked(false); // Uncheck the box
+
+        // Waiting for the PendingIntent from the wear app
+        br_ = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.i("CIO", "PendingIntent received !");
+                CheckBox cb = findViewById(R.id.checkBox);
+                cb.setChecked(true); // Check the box !
+            }
+        };
+
+        IntentFilter filter = new IntentFilter("mynotification.intent");
+        this.registerReceiver(br_, filter);
+        Log.i("CIO", "Filter installed.");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        this.unregisterReceiver(br_);
+        Log.i("CIO", "Filter uninstalled.");
+    }
+
+
 }
